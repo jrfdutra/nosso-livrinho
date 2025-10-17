@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nosso Livrinho • 1 Ano</title>
+  <style>
+    :root{
+      --bg:#fff7fb;
+      --card:#fff;
+      --accent:#ff7bb5;
+      --accent-2:#ffd3e8;
+      --text:#3b2b2b;
+      --muted:#7a6a6a;
+      --shadow: 0 8px 30px rgba(99,46,82,0.12);
+      --radius:18px;
+      --page-w:330px;
+      --page-h:500px;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: linear-gradient(180deg, var(--bg), #fff);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:24px;
+      padding:32px;
+    }
+
+    .book{
+      width: calc(var(--page-w)*2 + 48px);
+      max-width:100%;
+      display:flex;
+      gap:24px;
+      align-items:center;
+      justify-content:center;
+      transform-style:preserve-3d;
+    }
+
+    /* Single page style (we'll show left and right) */
+    .page{
+      width:var(--page-w);
+      height:var(--page-h);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      position:relative;
+      overflow:hidden;
+      transition:transform .5s cubic-bezier(.2,.9,.3,1), box-shadow .2s;
+    }
+
+    .page:hover{ transform: translateY(-6px); box-shadow: 0 14px 40px rgba(99,46,82,0.14); }
+
+    .cover{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:12px;
+    }
+
+    .title{
+      font-size:20px;
+      font-weight:700;
+      color:var(--accent);
+      letter-spacing:.2px;
+    }
+
+    .subtitle{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .photo{
+      width:100%;
+      height:240px;
+      border-radius:12px;
+      background:linear-gradient(180deg,var(--accent-2), #fff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      box-shadow: inset 0 -12px 40px rgba(255,123,181,0.06);
+      position:relative;
+    }
+
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .text{
+      font-size:15px;
+      line-height:1.45;
+      color:var(--text);
+      padding-right:6px;
+    }
+
+    .meta{
+      margin-top:auto;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .btn{
+      background:linear-gradient(90deg,var(--accent), #ff9ac9);
+      color:#fff;
+      border:none;
+      padding:8px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow: 0 6px 16px rgba(255,123,181,0.18);
+    }
+
+    .ghost{
+      background:transparent;
+      border:1px solid rgba(60,40,60,0.06);
+      color:var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .page-index{
+      font-size:13px;
+      color:var(--muted);
+      padding-left:6px;
+    }
+
+    /* hidden message reveal */
+    .hidden{
+      background:linear-gradient(180deg,#fff, #fff0f6);
+      border-radius:10px;
+      padding:10px;
+      margin-top:8px;
+      display:none;
+      font-size:14px;
+      color:var(--text);
+      box-shadow: inset 0 4px 12px rgba(255,123,181,0.04);
+    }
+
+    .reveal-btn{
+      background:transparent;
+      border:none;
+      color:var(--accent);
+      text-decoration:underline;
+      cursor:pointer;
+      font-weight:700;
+      padding:0;
+    }
+
+    /* footer music control */
+    .music-control{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      background:linear-gradient(180deg, #fff, #fff8fb);
+      border-radius:12px;
+      padding:10px 12px;
+      box-shadow:0 10px 30px rgba(99,46,82,0.08);
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .music-control button{ all:unset; cursor:pointer; display:flex; gap:8px; align-items:center; }
+
+    .music-icon{
+      width:38px; height:38px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(90deg,#ffd3e8, #ffbedd);
+      color:#6b1b4a; font-weight:800;
+      box-shadow: 0 8px 22px rgba(99,46,82,0.12);
+    }
+
+    .heart{
+      position:absolute;
+      right:14px;
+      top:14px;
+      width:46px; height:46px;
+      background:linear-gradient(180deg,#fff,#fff0f6);
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 8px 20px rgba(99,46,82,0.06);
+      font-size:20px;
+    }
+
+    /* responsive adjustments */
+    @media (max-width:880px){
+      .book{ flex-direction:column; gap:18px; width:100%; align-items:center; }
+      .page{ width: min(92vw, 420px); }
+      .music-control{ left:50%; transform:translateX(-50%); right:auto; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="book" id="book">
+      <!-- Left page -->
+      <article class="page" id="leftPage">
+        <div class="cover">
+          <div class="title">Nosso Livrinho 💕</div>
+          <div class="subtitle">1 ano de risadas, memórias, briguinhas, um mini-término e muitos "amo-te muito muito muito"</div>
+        </div>
+        <div class="photo" id="leftPhoto">
+          <!-- placeholder svg -->
+          <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#ffdfee"/><stop offset="1" stop-color="#fff3f8"/></linearGradient></defs>
+            <rect width="100%" height="100%" fill="url(#g1)"/>
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="22" fill="#c64a89">Coloca aqui a primeira foto 💌</text>
+          </svg>
+        </div>
+        <div class="text" id="leftText">
+          Um cantinho para guardar os nossos melhores momentos — abre a página e sente o abraço nas palavras.
+        </div>
+        <div class="meta">
+          <div class="page-index" id="leftIndex">1 / 6</div>
+          <div class="controls">
+            <button class="btn ghost" id="prevBtn" title="Página anterior">◀︎</button>
+            <button class="btn" id="nextBtn" title="Próxima página">Próximo ▶︎</button>
+          </div>
+        </div>
+        <div class="heart">❤️</div>
+      </article>
+
+      <!-- Right page -->
+      <article class="page" id="rightPage">
+        <div class="cover">
+          <div class="title" id="rightTitle">Primeira página</div>
+          <div class="subtitle" id="rightSubtitle">Onde começar? Pela nossa história.</div>
+        </div>
+
+        <div class="photo" id="rightPhoto">
+          <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="url(#g1)"/>
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20" fill="#c64a89">Clica em "Próximo" para ver as memórias</text>
+          </svg>
+        </div>
+
+        <div class="text" id="rightText">
+          Cada página é uma lembrança — fotos, frases, segredos e pequenas surpresas.
+        </div>
+
+        <div>
+          <button class="reveal-btn" id="revealBtn">Clica para ver uma lembrança escondida 🌟</button>
+          <div class="hidden" id="hiddenBox">Aqui fica a mensagem escondida — podes escrever algo muito pessoal e fofinho!</div>
+        </div>
+
+        <div class="meta">
+          <div class="page-index" id="rightIndex">2 / 6</div>
+          <div class="controls">
+            <button class="btn" id="surpriseBtn">Surpresa final 🎁</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- music control -->
+  <div class="music-control" id="musicControl" aria-hidden="false">
+    <div class="music-icon" id="musicIcon">♪</div>
+    <div>
+      <div style="font-weight:700">Música de fundo</div>
+      <div style="font-size:13px;color:var(--muted)">Clica para iniciar / pausar</div>
+    </div>
+    <button id="musicToggle" title="Tocar / Pausar" style="margin-left:12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 4v16l12-8z" fill="#6b1b4a"/></svg>
+    </button>
+  </div>
+
+  <!-- footer -->
+<footer style="
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:linear-gradient(180deg,#fff7fb,#fff);
+  color:var(--muted);
+  text-align:center;
+  padding:12px 0;
+  font-size:14px;
+  box-shadow:0 -4px 20px rgba(99,46,82,0.06);
+  font-family:inherit;
+  z-index:10;
+">
+  Projeto realizado por <strong>Júnior Ferreira</strong>
+</footer>
+
+  <!-- audio element (invisível) -->
+  <audio id="bgAudio" loop crossorigin="anonymous">
+    <source src="audio/Luz-Que-Me-Traz-Paz.mp3" type="audio/mp3">
+    <!-- Se preferires usar URL: substitui musica.mp3 pelo URL -->
+  </audio>
+
+  <script>
+    /* ========= DADOS DAS PÁGINAS =========
+       Cada objeto representa uma página no livrinho.
+       - title: título da página
+       - subtitle: subtítulo ou descrição
+       - text: texto principal
+       - img: caminho da imagem (p.ex. "images/page1.jpg" ou URL)
+       - hidden: mensagem oculta que aparece quando clicas em "revelar"
+    */
+    const pages = [
+  {
+    title: "O começo",
+    subtitle: "Aquela ida a padaria que mudou tudo",
+    text: "Lembras-te de quando começámos a falar e era tudo risadas e curiosidade? até parecia mentira que enfim eu conversava contigo. Aquele dia ficou guardado como se fosse um sonho.",
+    img: "images/1.jpeg",
+    hidden: "Eu sabia naquele dia que eras diferente. Amo-te muito muito muito por isso."
+  },
+  {
+    title: "Nossas aventuras e momentos sozinhos são incriveis, parece que ja nos conhecemos de outras vidas.",
+    subtitle: "Passeios, cafés e descobertas",
+    text: "Cada passeio contigo tem sempre algo inesperado e é isso que mais gosto: a simplicidade que parece festa quando estás comigo.",
+    img: "images/2.jpeg",
+    hidden: "Quero mil cafés e finos contigo, hoje e sempre."
+  },
+  {
+    title: "Nosso primeiro natal juntos",
+    subtitle: "Que juntos possamos celebrar muitos mais e criar a nossa tradição",
+    text: "Temos um idioma só nosso: palavras que aparecem só entre nós. Obrigado por todos os momentos únicos.",
+    img: "images/3.jpeg",
+    hidden: "Ainda me lembro da primeira vez que me chamaste amor e disse amoo-te"
+  },
+  {
+    title: "Quando fomos todos ver o jogo do Porto",
+    subtitle: "Eu já estou convencido de que minha vida é ao teu lado.",
+    text: "Nos dias difíceis foste braço e calma. Nos dias de alegria foste festa. És as duas coisas e eu adoro cada fase e nova descoberta tua.",
+    img: "images/4.jpeg",
+    hidden: "Prometo estar contigo nos dias calmos e nos dias loucos."
+  },
+  {
+    title: "Pequenos planos",
+    subtitle: "Que tenhamos um futuro incrivel e lindo juntos",
+    text: "Temos tantos planos ridiculamente bonitos: viagens, séries, músicas, e uma vida cheia de memórias. Vamos riscar-las juntos.",
+    img: "images/5.jpeg",
+    hidden: "Vamos construir memórias para uma vida."
+  },
+  {
+    title: "Para sempre",
+    subtitle: "O presente e o que vem",
+    text: "Um ano pode parecer pouco, mas é só o primeiro capítulo. Obrigado por cada minuto. Amo-te hoje e em todos os 'amanhãs' que virão.",
+    img: "images/6.jpeg",
+    hidden: "Abre este livro sempre que precisares. Amo-te muito muito muito."
+  },
+  {
+    title: "Recordações doces",
+    subtitle: "Momentos que aquecem",
+    text: "Cada detalhe do nosso dia-a-dia ficou gravado no coração, fotos, mensagens e risadas.",
+    img: "images/7.jpeg",
+    hidden: "És a melhor parte de cada dia meu."
+  },
+  {
+    title: "Surpresas inesperadas",
+    subtitle: "Alegria em pequenas doses",
+    text: "A felicidade está nas pequenas surpresas que encontramos juntos. Nunca quero perder isso.",
+    img: "images/8.jpeg",
+    hidden: "Cada sorriso teu é meu tesouro."
+  },
+  {
+    title: "Planos futuros",
+    subtitle: "O amanhã é nosso",
+    text: "Sonhos, viagens e momentos ainda por viver — tudo quero contigo ao meu lado.",
+    img: "images/9.jpeg",
+    hidden: "Mal posso esperar por tudo que ainda vamos viver."
+  },
+  {
+    title: "Que sejamos sempre unidos e cúmplices",
+    subtitle: "És a minha parceira de vida",
+    text: "Os dias ao teu lado serão sempre os melhores, mesmo quando chove lá fora.",
+    img: "images/10.jpeg",
+    hidden: "Ainda rio sozinho a lembrar de ti e do teu sorriso."
+  },
+  {
+    title: "Dias especiais",
+    subtitle: "Memórias únicas",
+    text: "Celebrar cada momento juntos tornou-se hábito, e adoro cada pequeno detalhe do nosso dia-a-dia.",
+    img: "images/11.jpeg",
+    hidden: "És a minha paz e alegria em todos os dias."
+  },
+  {
+    title: "Para sempre nós",
+    subtitle: "O melhor ainda está por vir",
+    text: "Este é apenas o primeiro ano, mas já construímos tantas lembranças que ficarão para sempre.",
+    img: "images/12.jpg",
+    hidden: "Obrigado por tudo. Amo-te muito muito muito hoje, amanhã e sempre."
+  }
+    ];
+
+    /* ========= LÓGICA DE NAVEGAÇÃO ========= */
+    let index = 0; // representa a página mostrada à direita (0 = primeira página do array)
+    const total = pages.length;
+
+    // elementos
+    const leftPhoto = document.getElementById('leftPhoto');
+    const rightPhoto = document.getElementById('rightPhoto');
+    const leftText = document.getElementById('leftText');
+    const rightText = document.getElementById('rightText');
+    const rightTitle = document.getElementById('rightTitle');
+    const rightSubtitle = document.getElementById('rightSubtitle');
+    const leftIndex = document.getElementById('leftIndex');
+    const rightIndex = document.getElementById('rightIndex');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const hiddenBox = document.getElementById('hiddenBox');
+    const surpriseBtn = document.getElementById('surpriseBtn');
+
+    // handy: atualiza o conteúdo das páginas (left = index-1, right = index)
+    function render() {
+      const right = pages[index];
+      const left = pages[index-1] || {
+        title: "Nosso livrinho 💕",
+        subtitle: "Abre as páginas e revê as memórias",
+        text: "Um ano da gente, 12 momentos lindos que vivemos...",
+        img: "images/1212.png",
+        hidden: ""
+      };
+
+      // left photo
+      if (left.img) {
+        leftPhoto.innerHTML = `<img src="${left.img}" alt="${left.title}">`;
+      } else {
+        leftPhoto.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#fff0f6"/>
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="22" fill="#c64a89">Ainda sem foto 🌸</text>
+        </svg>`;
+      }
+
+      // right photo
+      if (right.img) {
+        rightPhoto.innerHTML = `<img src="${right.img}" alt="${right.title}">`;
+      } else {
+        rightPhoto.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#fff3f8"/>
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="#c64a89">Adicionar foto aqui ✨</text>
+        </svg>`;
+      }
+
+      leftText.textContent = left.text;
+      rightText.textContent = right.text;
+      rightTitle.textContent = right.title;
+      rightSubtitle.textContent = right.subtitle;
+
+      leftIndex.textContent = (index === 0) ? `Capa` : `${index} / ${total}`;
+      rightIndex.textContent = `${index+1} / ${total}`;
+
+      // esconder mensagem oculta por padrão
+      hiddenBox.style.display = 'none';
+      revealBtn.style.display = right.hidden ? 'inline-block' : 'none';
+    }
+
+    // inicializa
+    render();
+
+    prevBtn.addEventListener('click', ()=> {
+      if (index > 0) index--;
+      render();
+    });
+
+    nextBtn.addEventListener('click', ()=> {
+      if (index < total - 1) index++;
+      render();
+    });
+
+    revealBtn.addEventListener('click', ()=> {
+      const right = pages[index];
+      if (!right) return;
+      hiddenBox.textContent = right.hidden || "Uma lembrança secreta...";
+      hiddenBox.style.display = hiddenBox.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // botão surpresa final: abre a última página e revela mensagem
+    surpriseBtn.addEventListener('click', ()=> {
+      index = total - 1;
+      render();
+      setTimeout(()=> {
+        hiddenBox.textContent = pages[index].hidden || "Surpresa!";
+        hiddenBox.style.display = 'block';
+      }, 350);
+    });
+
+    /* ========= CONTROLO DA MÚSICA ========= */
+    const audio = document.getElementById('bgAudio');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicIcon = document.getElementById('musicIcon');
+
+    // estado inicial: paused
+    let playing = false;
+
+    function updateMusicUI(){
+      if (playing) {
+        musicIcon.textContent = '♫';
+        musicToggle.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 4v16l12-8z" fill="#6b1b4a"/></svg>`;
+      } else {
+        musicIcon.textContent = '♪';
+        musicToggle.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="#6b1b4a"/></svg>`;
+      }
+    }
+    updateMusicUI();
+
+    musicToggle.addEventListener('click', async ()=> {
+      try {
+        if (!playing) {
+          await audio.play();
+          playing = true;
+        } else {
+          audio.pause();
+          playing = false;
+        }
+        updateMusicUI();
+      } catch (err) {
+        // autoplay blocked or error
+        alert("O browser pode bloquear reprodução automática. Clica novamente para tocar a música.");
+      }
+    });
+
+    // alterna ícone se o utilizador pausar via controls do audio (se exposto)
+    audio.addEventListener('play', ()=> { playing = true; updateMusicUI(); });
+    audio.addEventListener('pause', ()=> { playing = false; updateMusicUI(); });
+
+    /* ========= DICAS RÁPIDAS =========
+       - Para usar as tuas fotos: cria uma pasta "images" ao lado do index.html e põe:
+         images/page1.jpg, images/page2.jpg, ... images/page6.jpg
+       - Se preferires usar URLs em vez de ficheiros locais, altera "img" em cada page para o URL completo.
+       - Para alterar a música: substitui "musica.mp3" ou altera audio.src no elemento <audio>.
+       - Podes adicionar/remover páginas alterando a array 'pages' (atenção ao total).
+    */
+  </script>
+</body>
+</html>
