@@ -1,5 +1,5 @@
 Livrinho de 1 Ano de Namoro ❤️
-Descrição
+https://jrfdutra.github.io/nosso-livrinho/
 
 Este projeto é um livrinho digital interativo criado para comemorar 1 ano de namoro. Ele foi desenvolvido com HTML, CSS e JavaScript, proporcionando uma experiência simples, divertida e romântica. A ideia é registrar memórias, mensagens carinhosas e momentos especiais de forma digital e interativa.
 
